@@ -33,7 +33,7 @@ for _, row in gdf.iterrows():
         ).add_to(m)
 
 # Save the map to an HTML file
-m.save('flora_map.html')
+m.save('index.html')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
