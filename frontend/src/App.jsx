@@ -1,26 +1,36 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import React, { useEffect, useState } from 'react'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 
 function App() {
   const [speciesData, setSpeciesData] = useState([])
 
   useEffect(() => {    // ??? 
-    fetch('http://127.0.0.1:8000/top_species')
-    .then(response => response.json())
+    fetch('http://flora-steel-three.vercel.app/')
+    .then(res => res.json())
     .then(data => setSpeciesData(data))
-    .catch(error => console, error(error))
   }, [])
 
   return (
     <div>
-      <h1>Top Observed Species</h1>
-      <ul>
-        {speciesData.map((item, index) => (
-          <li key={index}>{item.scientific_name}: {item.count}</li>
-        ))}
-      </ul>
+      <h1>Observed Species</h1>
+      <MapContainer center={[43.47, -80.53]} zoom={12} style={{ height: '600px', width: '100%'}}>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {speciesData.map((obs, idx) =>
+          obs.latitude && obs.longitude ? (
+            <Marker key={idx} position={[obs.latitude, obs.longitude]}>
+              <Popup>
+                <b>Scientific Name:</b> {obs.scientific_name}<br />
+                <b>Common Name:</b> {obs.name || "N/A"}<br />
+                <b>Date:</b> {obs.date || "N/A"}
+              </Popup>
+            </Marker>
+          ) : null
+        )}
+      </MapContainer>
     </div>
   )
 }
