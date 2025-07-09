@@ -12,6 +12,8 @@ def safe_float(val):
 
 df = pd.read_csv('data/flora_observations.csv')
 df = df.rename(columns={'scientific name': 'scientific_name'})
+df = df[['scientific_name', 'name', 'date', 'score', 'latitude', 'longitude', 'altitude']]
+
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
