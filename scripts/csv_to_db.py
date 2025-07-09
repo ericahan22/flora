@@ -24,7 +24,13 @@ Base.metadata.create_all(engine)
 
 # Insert rows using SQLAlchemy ORM
 session = SessionLocal()
-for _, row in df.iterrows():
+for idx, row in df.iterrows():
+    if any(
+        row[col] is not None and not isinstance(row[col], float)
+        for col in ['score', 'latitude', 'longitude', 'altitude']
+    ):
+        print(f"Skipping row {idx} due to invalid float data: {row}")
+        continue
     obs = FloraObservation(
         scientific_name=row['scientific_name'],
         name=row['name'],
