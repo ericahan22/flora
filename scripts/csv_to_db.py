@@ -25,21 +25,30 @@ Base.metadata.create_all(engine)
 # Insert rows using SQLAlchemy ORM
 session = SessionLocal()
 for idx, row in df.iterrows():
-    if any(
-        row[col] is not None and not isinstance(row[col], float)
-        for col in ['score', 'latitude', 'longitude', 'altitude']
-    ):
-        print(f"Skipping row {idx} due to invalid float data: {row}")
+    float_prob = False
+    for col in ['score', 'latitude', 'longitude', 'altitude']:
+        val = row[col]
+        if val is not None and not isinstance(val, float):
+            print(f"Skipping row {idx}: {col} has invalid value {val} (type {type(val)})")
+            float_prob = True
+            break
+    if float_prob:
         continue
-    obs = FloraObservation(
-        scientific_name=row['scientific_name'],
-        name=row['name'],
-        date=row['date'],
-        score=row['score'],
-        latitude=row['latitude'],
-        longitude=row['longitude'],
-        altitude=row['altitude']
-    )
-    session.add(obs)
+    for col in ['scientific_name', 'date']:
+        val = row[col]
+        if not isinstance(val, str):
+            print(f"Skipping row {idx}: {col} has invalid value {val} (type {type(val)})")
+            break
+    else:
+        obs = FloraObservation(
+            scientific_name=row['scientific_name'],
+            name=row['name'] if isinstance(row['name'], str) else None,
+            date=row['date'],
+            score=row['score'],
+            latitude=row['latitude'],
+            longitude=row['longitude'],
+            altitude=row['altitude']
+        )
+        session.add(obs)
 session.commit()
 session.close()
