@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base
-from backend.database import Base
+from .database import Base
 
 class FloraObservation(Base):
     __tablename__ = "flora_observations"
