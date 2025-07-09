@@ -13,6 +13,20 @@ const greenIcon = new L.Icon({
   shadowSize: [41, 41]
 })
 
+function formatDate(dateStr) {
+  if (!dateStr) return "N/A";
+  const iso = dateStr.replace(/_/g, ":");
+  const d = new Date(iso);
+  if (isNaN(d)) return dateStr;
+  return d.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
 function App() {
   const [speciesData, setSpeciesData] = useState([])
 
@@ -34,7 +48,7 @@ function App() {
               <div style={{ minWidth: 180 }}>
                 <b>Scientific Name:</b> {obs.scientific_name}<br />
                 <b>Common Name:</b> {obs.name || "N/A"}<br />
-                <b>Date:</b> {obs.date || "N/A"}
+                <b>Date:</b> {formatDate(obs.date)}
               </div>
             </Popup>
           </Marker>
