@@ -1,0 +1,36 @@
+# .renderignore
+
+# Ignore frontend files and folders
+frontend/
+*.jsx
+*.js
+*.css
+*.html
+vite.config.js
+eslint.config.js
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Ignore local Python environment
+.venv/
+env/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore git and editor files
+.git/
+.gitignore
+*.log
+
+# Ignore data files you don't want deployed
+*.csv
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore node_modules if present
+node_modules/
