@@ -31,7 +31,7 @@ function App() {
   const [speciesData, setSpeciesData] = useState([])
 
   useEffect(() => { 
-    fetch('http://localhost:8000/api/observations/')//#https://flora-8f34.onrender.com/api/observations/')
+    fetch('https://flora-8f34.onrender.com/api/observations/') // local testing: http://localhost:8000/api/observations/
     .then(res => res.json())
     .then(data => setSpeciesData(data))
   }, [])
