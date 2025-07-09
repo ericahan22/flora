@@ -17,8 +17,6 @@ float_cols = ['score', 'latitude', 'longitude', 'altitude']
 for col in float_cols:
     df[col] = df[col].apply(safe_float)
 
-print(df.head(10))
-print(df.dtypes)
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
