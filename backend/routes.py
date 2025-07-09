@@ -12,11 +12,16 @@ def get_db():
     finally:
         db.close()
 
+def fix_nan(val):
+    if val is None:
+        return None
+    if isinstance(val, float) and math.isnan(val):
+        return None
+    return val
+
 @router.get("/api/observations/")
 def get_observations(db: Session=Depends(get_db)):
     results = db.query(models.FloraObservation).all()
-    def fix_nan(val):
-        return None if isinstance(val, float) and math.isnan(val) else val
     return [
         {
             "id": obs.id,
@@ -30,4 +35,3 @@ def get_observations(db: Session=Depends(get_db)):
         }
         for obs in results
     ]
-    return db.query(models.FloraObservation).all()
