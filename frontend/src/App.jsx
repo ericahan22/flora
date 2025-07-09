@@ -17,7 +17,7 @@ function App() {
   const [speciesData, setSpeciesData] = useState([])
 
   useEffect(() => { 
-    fetch('https://flora-8f34.onrender.com/api/observations`/')
+    fetch('https://flora-8f34.onrender.com/api/observations/')
     .then(res => res.json())
     .then(data => setSpeciesData(data))
   }, [])
