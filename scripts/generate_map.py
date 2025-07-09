@@ -1,12 +1,21 @@
 import pandas as pd
 import geopandas as gpd
 import math
+import folium
 
 # Load the CSV data
-df = pd.read_csv('flora_observations.csv')
+df = pd.read_csv('data/flora_observations.csv')
 
-# Display the first few rows
-print(df.head())
+# Reformat date
+def clean_date(date_str):
+    if pd.isna(date_str):
+        return "N/A"
+    try:
+        dt = pd.to_datetime(date_str.replace('_', ':').replace('T', ' ').replace('Z', ''))
+        return dt.strftime('%Y-%m-%d %H:%M:%S')
+    except Exception:
+        return date_str
+df['date'] = df['date'].apply(clean_date)
 
 # Convert to a GeoDataFrame
 gdf = gpd.GeoDataFrame(
@@ -14,7 +23,6 @@ gdf = gpd.GeoDataFrame(
     geometry=gpd.points_from_xy(df.longitude, df.latitude),
     crs='EPSG:4326'  # WGS 84
 )
-import folium
 
 # Calculate the mean latitude and longitude for map centering
 mean_lat = gdf.geometry.y.mean()
@@ -26,9 +34,19 @@ m = folium.Map(location=[mean_lat, mean_lon], zoom_start=6)
 # Add observation markers
 for _, row in gdf.iterrows():
     if not math.isnan(row.geometry.y):
+        scientific_name = row['scientific name']
+        common_name = row['name']
+        if pd.isna(common_name) or common_name == '':
+            common_name = "N/A"
+        date = row.get('date', 'N/A')
+        popup_html = f"""
+        <b>Scientific Name:</b> {scientific_name}<br>
+        <b>Common Name:</b> {common_name}<br>
+        <b>Date:</b> {date}
+        """
         folium.Marker(
             location=[row.geometry.y, row.geometry.x],
-            popup=f"{row['scientific name']} ({row['name']})",
+            popup=folium.Popup(popup_html, max_width=300),
             icon=folium.Icon(color='green', icon='leaf')
         ).add_to(m)
 

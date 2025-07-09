@@ -11,6 +11,6 @@ def get_db():
     finally:
         db.close()
 
-@router.get("/observations/")
-def read_observations(skip: int=0, limit: int=10, db: Session=Depends(get_db)):
-    return db.query(models.FloraObservation).offset(skip).limit(limit).all()
+@router.get("/api/observations/")
+def get_all_observations(db: Session=Depends(get_db)):
+    return db.query(models.FloraObservation).all()

@@ -1,8 +1,8 @@
 import pandas as pd
-from app.models import Base
-from app.database import engine
+from backend.models import Base
+from backend.database import engine
 
-df = pd.read_csv('flora_observations.csv')
+df = pd.read_csv('data/flora_observations.csv')
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
 
